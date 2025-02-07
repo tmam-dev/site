@@ -62,6 +62,13 @@
 .logo-regular {
   font-family: "Lemon", serif;
   font-weight: 400;
+  font-size: 1.5rem;
+  font-style: normal;
+}
+.logo-bold {
+  font-family: "Lemon", serif;
+  font-weight: 700;
+  font-size: 1.5rem;
   font-style: normal;
 }
 
