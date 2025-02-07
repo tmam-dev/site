@@ -250,87 +250,89 @@ gsap.to("#dashboard", {
 });
 
 // FAQ Accordion functionality
-document.addEventListener("DOMContentLoaded", () => {
-  const accordions = document.querySelectorAll(".faq-accordion");
+// document.addEventListener("DOMContentLoaded", () => {
+//   const accordions = document.querySelectorAll(".faq-accordion");
 
-  accordions.forEach((accordion) => {
-    accordion.addEventListener("click", function () {
-      // Toggle active class on the accordion
-      this.classList.toggle("active");
+//   accordions.forEach((accordion) => {
+//     accordion.addEventListener("click", function () {
+//       // Toggle active class on the accordion
+//       this.classList.toggle("active");
 
-      // Get the content panel and icon
-      const panel = this.nextElementSibling;
-      const icon = this.querySelector(".bi-plus");
+//       // Get the content panel and icon
+//       const panel = this.nextElementSibling;
+//       const icon = this.querySelector(".bi-plus");
 
-      // Toggle panel visibility
-      if (this.classList.contains("active")) {
-        // Open this panel
-        panel.style.display = "block";
-        icon.style.transform = "rotate(45deg)";
-      } else {
-        // Close this panel
-        panel.style.display = "none";
-        icon.style.transform = "rotate(0deg)";
-      }
+//       // Toggle panel visibility
+//       if (this.classList.contains("active")) {
+//         // Open this panel
+//         panel.style.display = "block";
+//         icon.style.transform = "rotate(45deg)";
+//       } else {
+//         // Close this panel
+//         panel.style.display = "none";
+//         icon.style.transform = "rotate(0deg)";
+//       }
 
-      // Close other panels
-      accordions.forEach((otherAccordion) => {
-        if (otherAccordion !== this) {
-          otherAccordion.classList.remove("active");
-          const otherPanel = otherAccordion.nextElementSibling;
-          const otherIcon = otherAccordion.querySelector(".bi-plus");
-          otherPanel.style.display = "none";
-          otherIcon.style.transform = "rotate(0deg)";
-        }
-      });
-    });
+//       // Close other panels
+//       accordions.forEach((otherAccordion) => {
+//         if (otherAccordion !== this) {
+//           otherAccordion.classList.remove("active");
+//           const otherPanel = otherAccordion.nextElementSibling;
+//           const otherIcon = otherAccordion.querySelector(".bi-plus");
+//           otherPanel.style.display = "none";
+//           otherIcon.style.transform = "rotate(0deg)";
+//         }
+//       });
+//     });
 
-    // Initially hide all panels
-    const panel = accordion.nextElementSibling;
-    panel.style.display = "none";
-  });
-});
+//     // Initially hide all panels
+//     const panel = accordion.nextElementSibling;
+//     panel.style.display = "none";
+//   });
+// });
 
-// ------------- reveal section animations ---------------
+// // ------------- reveal section animations ---------------
 
-const sections = gsap.utils.toArray("section");
+// const sections = gsap.utils.toArray("section");
 
-sections.forEach((sec) => {
-  const revealUptimeline = gsap.timeline({
-    paused: true,
-    scrollTrigger: {
-      trigger: sec,
-      start: "10% 80%", // top of trigger hits the top of viewport
-      end: "20% 90%",
-      // markers: true,
-      // scrub: 1,
-    },
-  });
+// sections.forEach((sec) => {
+//   const revealUptimeline = gsap.timeline({
+//     paused: true,
+//     scrollTrigger: {
+//       trigger: sec,
+//       start: "10% 80%", // top of trigger hits the top of viewport
+//       end: "20% 90%",
+//       // markers: true,
+//       // scrub: 1,
+//     },
+//   });
 
-  revealUptimeline.to(sec.querySelectorAll(".reveal-up"), {
-    opacity: 1,
-    duration: 0.8,
-    y: "0%",
-    stagger: 0.2,
-  });
-});
+//   revealUptimeline.to(sec.querySelectorAll(".reveal-up"), {
+//     opacity: 1,
+//     duration: 0.8,
+//     y: "0%",
+//     stagger: 0.2,
+//   });
+// });
 
-// Add this at the global scope
-window.toggleFaq = function (element) {
-  // Get the content element
-  const content = element.nextElementSibling;
-  const icon = element.querySelector(".bi-plus");
+// // Add this at the global scope
+// window.toggleFaq = function (element) {
+//   // Get the content element
+//   const content = element.nextElementSibling;
+//   const icon = element.querySelector(".bi-plus");
 
-  // Close all other FAQs
-  document.querySelectorAll(".faq-content").forEach((item) => {
-    if (item !== content && !item.classList.contains("tw-hidden")) {
-      item.classList.add("tw-hidden");
-      const otherIcon = item.previousElementSibling.querySelector(".bi-plus");
-      if (otherIcon) {
-        otherIcon.style.transform = "rotate(0deg)";
-      }
-    }
-  });
+//   // Close all other FAQs
+//   document.querySelectorAll(".faq-content").forEach((item) => {
+//     if (item !== content && !item.classList.contains("tw-hidden")) {
+//       item.classList.add("tw-hidden");
+//       const otherIcon = item.previousElementSibling.querySelector(".bi-plus");
+//       if (otherIcon) {
+//         otherIcon.style.transform = "rotate(0deg)";
+//       }
+//     }
+//   });
+
+
 
   // Toggle current FAQ
   content.classList.toggle("tw-hidden");
