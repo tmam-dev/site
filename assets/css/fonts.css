@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Vercetti";
+  src: url("../fonts/Vercetti-Regular.woff2") format("woff2"),
+    url("../fonts/Vercetti-Regular.woff") format("woff"),
+    url("../fonts/Vercetti-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
