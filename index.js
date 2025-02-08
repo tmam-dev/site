@@ -53,26 +53,56 @@ function responsive() {
     toggleHeader();
   }
 
+  // Remove all existing event listeners first
+  navToggles.forEach((toggle, index) => {
+    const dropdown = navDropdowns[index];
+    toggle.removeEventListener('mouseenter', toggle._openHandler);
+    dropdown.removeEventListener('mouseleave', dropdown._closeHandler);
+    toggle.removeEventListener('click', toggle._clickHandler);
+  });
+
   if (window.innerWidth > RESPONSIVE_WIDTH) {
     collapseHeaderItems.style.height = "";
+    
+    // Desktop behavior - hover only
     navToggles.forEach((toggle, index) => {
       const dropdown = navDropdowns[index];
-      toggle.addEventListener("mouseenter", () => openNavDropdown(dropdown));
-      toggle.addEventListener("mouseleave", () => closeNavDropdown(dropdown));
+      
+      toggle._openHandler = () => openNavDropdown(dropdown);
+      dropdown._closeHandler = () => closeNavDropdown(dropdown);
+      
+      toggle.addEventListener('mouseenter', toggle._openHandler);
+      dropdown.addEventListener('mouseleave', dropdown._closeHandler);
     });
   } else {
-    isHeaderCollapsed = true;
+    // Mobile behavior - click only
     navToggles.forEach((toggle, index) => {
       const dropdown = navDropdowns[index];
-      toggle.removeEventListener("mouseenter", () => openNavDropdown(dropdown));
-      toggle.removeEventListener("mouseleave", () =>
-        closeNavDropdown(dropdown)
-      );
+      
+      toggle._clickHandler = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleNavDropdown(dropdown);
+      };
+      
+      toggle.addEventListener('click', toggle._clickHandler);
     });
+    
+    isHeaderCollapsed = true;
   }
 }
+
+// Initialize responsive behavior
 responsive();
 window.addEventListener("resize", responsive);
+
+// Remove initial click handlers since they'll be added in responsive()
+navToggles.forEach((toggle) => {
+  const oldClickHandler = toggle.getAttribute('onclick');
+  if (oldClickHandler) {
+    toggle.removeAttribute('onclick');
+  }
+});
 
 /** Dark and light theme */
 if (
@@ -117,7 +147,6 @@ const MAX_PROMPTS = 3;
 promptForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  // window.open("https://github.com/PaulleDemon", "_blank")
 
   if (promptWindow.promptList.length >= MAX_PROMPTS) return false;
 
@@ -144,7 +173,16 @@ dropdowns.forEach(
 );
 
 function toggleNavDropdown(dropdown) {
-  if (dropdown.getAttribute("data-open") === "true") {
+  const isOpen = dropdown.getAttribute("data-open") === "true";
+  
+  // Close all other dropdowns
+  navDropdowns.forEach((other) => {
+    if (other !== dropdown) {
+      closeNavDropdown(other);
+    }
+  });
+
+  if (isOpen) {
     closeNavDropdown(dropdown);
   } else {
     openNavDropdown(dropdown);
@@ -152,35 +190,29 @@ function toggleNavDropdown(dropdown) {
 }
 
 function openNavDropdown(dropdown) {
-  // Close other dropdowns first
-  navDropdowns.forEach((other) => {
-    if (other !== dropdown) {
-      closeNavDropdown(other);
-    }
-  });
-
+  // Remove any existing classes first
+  closeNavDropdown(dropdown);
+  
   dropdown.classList.add(
     "tw-opacity-100",
     "tw-scale-100",
-    "max-lg:tw-min-h-[450px]",
-    "max-lg:!tw-h-fit",
     "tw-min-w-[320px]"
   );
+  
+  if (window.innerWidth <= RESPONSIVE_WIDTH) {
+    dropdown.classList.add("max-lg:!tw-h-fit", "max-lg:tw-min-h-[450px]");
+  }
 
   dropdown.setAttribute("data-open", "true");
 }
 
 function closeNavDropdown(dropdown) {
-  if (dropdown.matches(":hover")) {
-    return;
-  }
-
   dropdown.classList.remove(
     "tw-opacity-100",
     "tw-scale-100",
-    "max-lg:tw-min-h-[450px]",
     "tw-min-w-[320px]",
-    "max-lg:!tw-h-fit"
+    "max-lg:!tw-h-fit",
+    "max-lg:tw-min-h-[450px]"
   );
 
   dropdown.setAttribute("data-open", "false");
@@ -340,3 +372,13 @@ gsap.to("#dashboard", {
     ? "rotate(0deg)"
     : "rotate(45deg)";
 };
+
+// Add click handlers for mobile
+navToggles.forEach((toggle, index) => {
+  const dropdown = navDropdowns[index];
+  toggle.addEventListener('click', () => {
+    if (window.innerWidth <= RESPONSIVE_WIDTH) {
+      toggleNavDropdown(dropdown);
+    }
+  });
+});
